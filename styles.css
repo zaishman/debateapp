@@ -1,0 +1,52 @@
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    background-image: url('cool.png');
+    background-size: fit;
+}
+
+#dividerContainer {
+    display: grid;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 10px;
+    grid-template-columns: 6fr 3fr;
+}
+
+#timerSection {
+    background-color: #5facfd;
+    min-height: calc(100vh - 20px);
+    border:2px solid #3e83cb;
+}
+
+#noteSection {
+    background-color: #9dcdff;
+    min-height: calc(100vh - 20px);
+    border:2px solid #3e83cb;
+}
+
+#timerArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+}
+
+#increaseTime {
+    transition: transform 0.3s ease;
+}
+
+#increaseTime:hover {
+    transform: translateX(-2px);
+}
+
+#decreaseTime {
+    transition: transform 0.3s ease;
+}
+
+#decreaseTime:hover {
+    transform: translateX(2px);
+}
+
