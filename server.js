@@ -14,36 +14,32 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 //routes the frotend and backend, essentially answers the fetch(/chat)
 
+const usedTopics = [];
 //get fetches response, not awaits one and sends it over
 app.get('/topic', async (req, res) => {
     try {
+        const avoidList = usedTopics.length > 0 ? `Do NOT give any of these topics or anything similar: ${usedTopics.join(", ")}` : "";
+
         const response = await anthropic.messages.create({
             model: 'claude-sonnet-4-6',
             max_tokens: 1024,
+            temperature: 1,
             messages: [{
                 role: 'user',
-                content: 'Provide me with just a random debate topic, make it simple, yet thought provoking and discussion worthy; while also making it reflect real world problems and ethics. Take sources from international debate clubs, and derive the debate themes and premise around that. So, educational, well-rounded, and debateable. Reply only with the topic, and NO explainations or punctuations at the end- refrain from emojis and symbols.'
+                content: 'Provide me with just a random debate topic, make it simple, yet thought provoking and discussion worthy; while also making it reflect real world problems and ethics. Avoid saying governments constantly, and only use it whenever truly nessecary, everything doesnt have to revovle around politics. Make sure that its completely different each time, so new different central themes and concepts, branchings technology, ethics, science, education or culture. Take sources from international debate clubs, and derive the debate themes and premise around that. So, educational, well-rounded, and debateable. Reply only with the topic, and NO explainations or punctuations at the end- refrain from emojis and symbols. Make sure every topic is different from the last. Request ID: ${Date.now()}'
             }]
         });
-        res.json({topic: response.content[0].text});
-            //message that the frontend sends, and response with res.json
+        const topic = response.content[0].text;
+        usedTopics.push(topic);
+        res.json({topic});
+        //prevents repetition of used topics
+
+        //message that the frontend sends, and response with res.json
     } catch (error) {
         console.log("FULL ERROR:", error);
         res.status(500).json({ error: error.message });
     }
 });
     app.listen(3000, () => console.log('Running on http://localhost:3000'));
-
-/*async function askClaude(userMessage) {
-    const response = await fetch('/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            messages: [{ role: 'user', content: userMessage }]
-        })
-    });
-    const data = await response.json();
-    return data.content[0].text;
-}*/
 
     //sends message user sends, and tells claude to accept the content
