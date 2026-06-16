@@ -78,10 +78,11 @@ const downTime = document.getElementById('decreaseTime');
 //DEBATE STUFF
 
 const sides = ["Affirmative", "Negative"];
+let currentSources = [];
 
 document.getElementById('shuffleButton').addEventListener('click', async function() {
     const promptArea = document.getElementById('promptArea');
-
+    const sourceList = document.getElementById('sourceList');
     try {
     const response = await fetch('/topic');
     console.log("Status:", response.status);
@@ -90,7 +91,13 @@ document.getElementById('shuffleButton').addEventListener('click', async functio
     console.log("response:", text);
 
     const data = JSON.parse(text);
+    console.log("Full data:", data); 
+    console.log("Sources:", data.sources);
+
     promptArea.textContent = data.topic;
+
+    currentSources = data.sources;
+
     document.getElementById('standingArea').textContent = sides[Math.floor(Math.random() * sides.length)];
    
     } catch (error) {
@@ -98,6 +105,26 @@ document.getElementById('shuffleButton').addEventListener('click', async functio
         promptArea.textContent = "error:" + error.message;
     }
 });
+
+
+let sourcesOpen =false;
+
+document.getElementById('toggleSources').addEventListener('click', function() {
+    const sourceContainer = document.getElementById('sourceList');
+    sourcesOpen = !sourcesOpen;
+
+    if(sourcesOpen) {
+    sourceContainer.innerHTML = "";
+
+    currentSources.forEach((source) => {
+        const li = document.createElement('li');
+        li.textContent = source;
+        sourceContainer.appendChild(li);
+    })} else {
+        sourceContainer.innerHTML = "";
+    }
+});
+
 
 //NOTE STUFF
 
@@ -151,14 +178,30 @@ saveButton.addEventListener('click', () => {
 });
 
     document.getElementById('savedNotes').addEventListener('change', function() {
-        const label= document.getElementById('label');
-        const labelData = document.getElementById('labelNotes').value;
-
+        const selectedIndex= this.selectedIndex - 1;
         const selected = this.options[this.selectedIndex];
+
         document.getElementById('content').textContent= selected.dataset.content;
         document.getElementById('label').textContent = "Note " + this.selectedIndex + ": " + selected.dataset.label; 
         //creates and option with the data, and makes it the text of said content. 
-    });
+
+        const label= document.getElementById('label');
+        const labelData = document.getElementById('labelNotes').value;
+
+    document.getElementById('deleteNote').onclick = function() {
+            savedNotes.splice(selectedIndex, 1);
+            localStorage.setItem('notes', JSON.stringify(savedNotes));
+            document.getElementById('savedNotes').remove(selectedIndex + 1);
+            document.getElementById('content').textContent=' ';
+            document.getElementById('label').textContent=' ';
+        
+            if(viewAllOpen) {
+                viewAllOpen=false;
+                document.getElementById('viewAll').click();
+                //cute lil trick that simulates the click function without an actual click
+            }
+        };
+    }); 
 
 let viewAllOpen=false;
 
@@ -177,6 +220,17 @@ document.getElementById('viewAll').addEventListener('click', function() {
         card.dataset.label = noteObj.label;
         //display label
         container.appendChild(card);
+
+        const deleteButton= document.createElement('button');
+        deleteButton.textContent="X";
+        deleteButton.addEventListener('click', function() {
+            savedNotes.splice(index, 1);
+            localStorage.setItem('notes', JSON.stringify(savedNotes));
+            container.innerHTML = " ";
+            viewAllOpen= false;
+            document.getElementById('viewAll').click();
+        });
+        card.appendChild(deleteButton);
     })
     } else {
         container.innerHTML = " ";
