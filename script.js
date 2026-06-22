@@ -123,6 +123,7 @@ document.getElementById('toggleSources').addEventListener('click', function() {
     currentSources.forEach((source) => {
         const li = document.createElement('li');
         li.textContent = source;
+        li.className = 'sourceCard';
         sourceContainer.appendChild(li);
     })} else {
         sourceContainer.innerHTML = "";
@@ -191,6 +192,7 @@ saveButton.addEventListener('click', () => {
 
         const label= document.getElementById('label');
         const labelData = document.getElementById('labelNotes').value;
+        document.getElementById('noteDisplay').style.display = 'block';
 
     document.getElementById('deleteNote').onclick = function() {
             savedNotes.splice(selectedIndex, 1);
@@ -198,7 +200,8 @@ saveButton.addEventListener('click', () => {
             document.getElementById('savedNotes').remove(selectedIndex + 1);
             document.getElementById('content').textContent=' ';
             document.getElementById('label').textContent=' ';
-        
+            document.getElementById('noteDisplay').style.display = 'none';
+            
             if(viewAllOpen) {
                 viewAllOpen=false;
                 document.getElementById('viewAll').click();
@@ -216,8 +219,16 @@ document.getElementById('viewAll').addEventListener('click', function() {
     if(viewAllOpen) {
     container.innerHTML = "";
     savedNotes.forEach((noteObj, index) => {
-        const card= document.createElement("p");
-        card.textContent = "Note " + (index + 1) + ": " + noteObj.label + " — " + noteObj.content;
+        const card= document.createElement("div");
+        const labelCard = document.createElement("p");
+        const contentCard = document.createElement("p");
+
+        card.className = "noteCard";
+        labelCard.textContent = "Note " + (index + 1) + ": " + noteObj.label;
+        contentCard.textContent =  noteObj.content;
+
+        card.appendChild(labelCard);
+        card.appendChild(contentCard);
         //save the label as note + index number + 1, plus the label
         card.dataset.content = noteObj.content;
         //display content
@@ -227,6 +238,7 @@ document.getElementById('viewAll').addEventListener('click', function() {
 
         const deleteButton= document.createElement('button');
         deleteButton.textContent="X";
+        deleteButton.className= "xButton";
         deleteButton.addEventListener('click', function() {
             savedNotes.splice(index, 1);
             localStorage.setItem('notes', JSON.stringify(savedNotes));

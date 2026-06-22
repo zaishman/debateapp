@@ -26,6 +26,9 @@ body {
     box-sizing: border-box;
     overflow: hidden;
     background-color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 #noteSection {
@@ -40,13 +43,20 @@ body {
 #content1 {
     padding-left: 20px;
     padding-right: 20px;
-    transform: translate(0, 40%) 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
 }
 
 #content2 {
     padding-left: 20px;
-    padding-right: 10px;
-    transform: translate(0, 50%) 
+    padding-right: 10px; 
+    height: 100%;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
 }
 
 #timerArea {
@@ -235,4 +245,62 @@ body {
     justify-content: center;
     text-align: center;
     flex-direction: column;
+}
+
+.sourceCard {
+    background-color:#fff8fa; 
+    border: 2px solid #e3c7ce; 
+    color: #e3b7c2;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    list-style: none;
+    padding: 7px;
+    margin-right: 10px;
+}
+
+.xButton {
+    background-color:#ffe4ea; 
+    border:2px solid #e3c7ce; 
+    color: #e3b7c2; 
+    border-radius:10px; 
+    width: 40px; 
+    height: 35px; 
+    font-size: 15px; 
+    cursor: pointer;
+}
+
+.noteCard {
+    background-color:#fff8fa; 
+    border: 2px solid #e3c7ce; 
+    color: #e3b7c2;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    list-style: none;
+    padding: 7px;
+}
+
+#allNotes {
+    padding-top: 5px;
+    margin-right: 10px;
+}
+
+#noteDisplay {
+    padding-top: 5px;
+    margin-right: 10px;
+    background-color:#fff8fa; 
+    border: 2px solid #e3c7ce; 
+    color: #e3b7c2;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    list-style: none;
+    padding: 7px;
+    display: none;
+}
+
+#label {
+    color: #e3b7c2;
+}
+
+#content {
+    color: #e3b7c2;
 }
